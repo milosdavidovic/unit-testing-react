@@ -1,0 +1,111 @@
+body {
+  padding-top: 50px;
+  background: #ffffff;
+}
+
+h1 {
+  text-align: center;
+}
+
+h2 {
+  text-align: center;
+  text-transform: uppercase;
+  color: transparent;
+}
+
+#coin {
+  position: relative;
+  margin: 0 auto;
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+}
+
+#coin div {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-shadow: inset 0 0 45px rgba(255, 255, 255, 0.3),
+    0 12px 20px -10px rgba(0, 0, 0, 0.4);
+}
+
+.side-a {
+  background-image: url("./images/coin-tails.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.side-b {
+  background-image: url("./images/coin-heads.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+#coin {
+  transition: transform 1s ease-in;
+  transform-style: preserve-3d;
+}
+
+#coin div {
+  position: absolute;
+  backface-visibility: hidden;
+}
+
+.side-a {
+  z-index: 100;
+}
+
+.side-b {
+  transform: rotateY(-180deg);
+}
+
+#coin.heads {
+  animation: flipHeads 2s ease-out forwards;
+}
+
+#coin.tails {
+  animation: flipTails 2s ease-out forwards;
+}
+
+h2.heads {
+  animation-name: appear;
+  animation-duration: 1s;
+  animation-delay: 1s;
+  animation-fill-mode: forwards;
+}
+
+h2.tails {
+  animation-name: appear;
+  animation-duration: 1s;
+  animation-delay: 1s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes flipHeads {
+  from {
+    transform: rotateY(0);
+  }
+  to {
+    transform: rotateY(1800deg);
+  }
+}
+
+@keyframes flipTails {
+  from {
+    transform: rotateY(0);
+  }
+  to {
+    transform: rotateY(1980deg);
+  }
+}
+
+@keyframes appear {
+  0% {
+    color: transparent;
+  }
+  100% {
+    color: black;
+  }
+}
