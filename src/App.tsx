@@ -1,29 +1,63 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { Maybe, BetOption, UserBet } from "./App.types";
 import "./App.css";
+import Header from "./Header/Header";
+import CoinAnimation from "./CoinAnimation/CoinAnimation";
+import CoinResult from "./CoinResult/CoinResult";
+import BetForm from "./BetForm/BetForm";
+import GameResult from "./GameResult/GameResult";
+import { createTransaction } from "./service/api";
+
+const WIN_MULTIPLIER = 2;
 
 const App = () => {
-  const [result, setResult] = useState("");
+  const [result, setResult] = useState<Maybe<BetOption>>(null);
+  const [message, setMessage] = useState("");
+  const betRef = useRef<UserBet>();
 
-  const handleOnClick = () => {
-    const flipResult = Math.random();
-    setResult("");
-    setTimeout(() => {
-      if (flipResult > 0.5) {
-        setResult("tails");
-      } else {
-        setResult("heads");
-      }
-    }, 100);
+  const resetStateForNewRound = () => {
+    setResult(null);
+    setMessage("");
   };
+
+  const handleOnClick = (bet: BetOption, amount: number) => {
+    betRef.current = { amount, bet };
+    resetStateForNewRound();
+    setTimeout(() => {
+      if (Math.random() > 0.5) {
+        setResult("heads");
+        return;
+      }
+      setResult("tails");
+    }, 10);
+    console.log(result);
+  };
+
+  useEffect(() => {
+    const handleResult = () => {
+      // Delay result until animation finish
+      setTimeout(() => {
+        if (!result || !betRef.current) return;
+        const { bet, amount } = betRef.current;
+        if (result === bet) {
+          setMessage(`You won $${WIN_MULTIPLIER * amount}`);
+          createTransaction(WIN_MULTIPLIER * amount);
+          return;
+        }
+        setMessage(`You lost $${amount}`);
+        createTransaction(-amount);
+      }, 2000);
+    };
+    handleResult();
+  }, [result]);
 
   return (
     <>
-      <h1>Click on coin to flip</h1>
-      <div id="coin" className={result} onClick={handleOnClick}>
-        <div className="side-a"></div>
-        <div className="side-b"></div>
-      </div>
-      {result && <h2 className={result}>{result}</h2>}
+      <Header text="Toss a coin" />
+      <CoinAnimation side={result} />
+      <CoinResult text={result || ""} />
+      <BetForm onBet={handleOnClick} />
+      <GameResult text={message} />
     </>
   );
 };
