@@ -5,7 +5,11 @@ interface Props {
 }
 
 const CoinResult: React.FC<Props> = ({ text }) => {
-  return <h2 className={text ? "appear" : ""}>{text}</h2>;
+  return (
+    <h2 data-testid="game-result" className={text ? "appear" : ""}>
+      {text}
+    </h2>
+  );
 };
 
 export default CoinResult;

@@ -7,36 +7,8 @@ const sleep = (time: number) =>
   });
 
 async function createTransaction(amount: number) {
-  await sleep(500);
+  await sleep(100);
   return { data: { success: true } };
 }
 
-async function savePost(postData: any) {
-  await sleep(1000);
-  return { data: { post: postData } };
-}
-
-const greetings = ["Hello", "Hi", "Hey there", `What's up`, "Howdy", `G'day`];
-
-async function loadGreeting(subject: any) {
-  return { data: { greeting: `${await fetchRandomGreeting()} ${subject}` } };
-}
-
-async function fetchRandomGreeting() {
-  await sleep(1000);
-  return greetings[Math.floor(Math.random() * greetings.length)];
-}
-
-// a fire-and-forget function to report errors
-// for componentDidCatch
-async function reportError() {
-  await sleep(1000);
-  return { success: true };
-}
-
-async function submitForm() {
-  await sleep(1000);
-  return { success: true };
-}
-
-export { savePost, loadGreeting, reportError, submitForm, createTransaction };
+export { createTransaction };

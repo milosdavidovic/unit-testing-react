@@ -7,6 +7,7 @@ import CoinResult from "./CoinResult/CoinResult";
 import BetForm from "./BetForm/BetForm";
 import GameResult from "./GameResult/GameResult";
 import { createTransaction } from "./service/api";
+import generateGameResult from "./helpers/generateGameResult";
 
 const WIN_MULTIPLIER = 2;
 
@@ -24,13 +25,12 @@ const App = () => {
     betRef.current = { amount, bet };
     resetStateForNewRound();
     setTimeout(() => {
-      if (Math.random() > 0.5) {
+      if (generateGameResult() === "heads") {
         setResult("heads");
         return;
       }
       setResult("tails");
     }, 10);
-    console.log(result);
   };
 
   useEffect(() => {
@@ -40,12 +40,14 @@ const App = () => {
         if (!result || !betRef.current) return;
         const { bet, amount } = betRef.current;
         if (result === bet) {
-          setMessage(`You won $${WIN_MULTIPLIER * amount}`);
-          createTransaction(WIN_MULTIPLIER * amount);
+          createTransaction(WIN_MULTIPLIER * amount).then(() => {
+            setMessage(`You won $${WIN_MULTIPLIER * amount}`);
+          });
           return;
         }
-        setMessage(`You lost $${amount}`);
-        createTransaction(-amount);
+        createTransaction(-amount).then(() => {
+          setMessage(`You lost $${amount}`);
+        });
       }, 2000);
     };
     handleResult();
