@@ -40,8 +40,9 @@ const App = () => {
         if (!result || !betRef.current) return;
         const { bet, amount } = betRef.current;
         if (result === bet) {
-          createTransaction(WIN_MULTIPLIER * amount).then(() => {
-            setMessage(`You won $${WIN_MULTIPLIER * amount}`);
+          const winAmount = WIN_MULTIPLIER * amount;
+          createTransaction(winAmount).then(() => {
+            setMessage(`You won $${winAmount}`);
           });
           return;
         }
