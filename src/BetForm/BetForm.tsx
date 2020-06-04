@@ -43,7 +43,7 @@ const BetForm: React.FC<Props> = ({ onBet }) => {
       <button type="button" onClick={handleOnClick}>
         BET
       </button>
-      {error && <h3 data-testid="bet-error">{error}</h3>}
+      {error && <h3 role="alert">{error}</h3>}
     </form>
   );
 };
